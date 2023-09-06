@@ -45,7 +45,7 @@ def main(
     typer.echo(f"Вы выбрали {tuning}, {num_frets}")
 
     if tuning == "e_standart" and num_frets == 6:
-        notation = draw_notation(["E4", "B3", "G3", "D3", "A2", "E2"], 6)
+        notation = draw_notation(["E2", "A2", "D3", "G3", "B3", "E4"], 6)
         print(notation)
 
 
@@ -57,7 +57,7 @@ def draw_notation(string_notes, num_frets):
     notation = "==|==" + "==".join([str(i) for i in range(num_frets)])
 
     # гриф гитары
-    for note in string_notes:
+    for note in reversed(string_notes):
         notation += f"\n{note}|"
         notation += "-" * num_hyphens
 
