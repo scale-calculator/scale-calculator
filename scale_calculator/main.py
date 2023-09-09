@@ -5,9 +5,18 @@ import typer
 # B3|------------------
 # G3|------------------
 # D3|--7-----1---------
-# A2|--4-----5--6------
-# E2|--1-----2--3------
+# A2|--4-----5--6-----7
+# E2|--1-----2--3-----4
 # ==|==0==1==2==3==4==5
+
+"""
+C-D-E-F-G-A-B-C
+ 2 2 1 2 2 2 1
+
+C C# D D# E F F# G G# A A# B C
+
+
+"""
 
 # e|-0-------
 # B|-0-1---3-
@@ -26,38 +35,56 @@ def main(
         ..., help="Гитарная настройка. Например, e_standard."),
     # scale: str = typer.Option(
     #     ..., help="Музыкальная шкала. Например, minor."),
-    # root: str = typer.Option(
-    #      ..., help="Корневая нота. Например, e."),
+    root: str = typer.Option(
+         ..., help="Корневая нота. Например, E."),
     # fretboard: list = typer.Option(
     #     ..., help="Диапазон грифа. Например, лады 0-5.")
     num_frets: int = typer.Option(
-        ..., help="Количество ладов. Например, 6"),
+        ..., help="Количество ладов. Например, 4"),
 ):
-    typer.echo(f"Вы выбрали {tuning} и {num_frets} ладов!")
+    typer.echo(f"Вы выбрали {tuning}, {root} и {num_frets} ладов!")
 
     if tuning == "e_standart":
         string_notes = ["E2", "A2", "D3", "G3", "B3", "E4"]
 
     print("Нотация:")
-    print(draw_notation(string_notes, num_frets))
+    print(draw_notation(string_notes, num_frets, root))
     print("Табулатура:")
     print(draw_tablature(string_notes, num_frets))
 
 
-def draw_notation(string_notes, num_frets):
+def draw_notation(string_notes, num_frets, root):
 
     num_hyphens = num_frets * 3
 
     # верхняя горизонтальная линия
-    notation = "==|==" + "==".join([str(i) for i in range(num_frets)])
+    notation = "==|==" + "==".join(str(i) for i in range(num_frets))
+
+    lines = []
+
+    # скелет грифа гитары
+    for note in reversed(string_notes):
+        line = f"{note}|"
+        line += "-" * num_hyphens
+        lines.append(line)
+
+    # определение первой струны
+    index_to_replace = None
+    for index, line in enumerate(reversed(lines)):
+        if line.startswith(root):
+            index_to_replace = len(lines) - 1 - index
+            break
+
+    # положения струны
+    if index_to_replace is not None:
+        new_value = f"{note}|" + "--1-----2--3"
+        lines[index_to_replace] = new_value
 
     # гриф гитары
-    for note in reversed(string_notes):
-        notation += f"\n{note}|"
-        notation += "-" * num_hyphens
+    notation += "\n" + "\n".join(lines)
 
     # нижняя горизонтальная линия
-    notation += "\n" + "==|==" + "==".join([str(i) for i in range(num_frets)])
+    notation += "\n" + "==|==" + "==".join(str(i) for i in range(num_frets))
 
     return notation
 
