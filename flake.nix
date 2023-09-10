@@ -9,13 +9,13 @@
     in
     {
       packages = forAllSystems (system: {
-        default = pkgs.${system}.poetry2nix.mkPoetryApplication { projectDir = self; };
+        default = pkgs.${system}.poetry2nix.mkPoetryApplication { projectDir = self; python = pkgs.${system}.python311; };
       });
 
       devShells = forAllSystems (system: {
         default = pkgs.${system}.mkShellNoCC {
           packages = with pkgs.${system}; [
-            (poetry2nix.mkPoetryEnv { projectDir = self; })
+            (poetry2nix.mkPoetryEnv { projectDir = self; python = pkgs.${system}.python311; })
             poetry
           ];
         };
