@@ -1,4 +1,5 @@
 import typer
+from scale_calculator import tunings
 
 # ==|==0==1==2==3==4==5
 # E4|------------------
@@ -26,6 +27,7 @@ C C# D D# E F F# G G# A A# B C
 # E|-0-2-3---
 
 app = typer.Typer()
+app.add_typer(tunings.app, name="tunings")
 
 
 @app.command()

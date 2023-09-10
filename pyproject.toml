@@ -13,7 +13,14 @@ typer = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
+pytest = "^7.4.2"
+
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+pythonpath = "scale_calculator"
+
