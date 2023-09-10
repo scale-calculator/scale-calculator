@@ -1,4 +1,5 @@
 import typer
+
 from scale_calculator import tunings
 
 # ==|==0==1==2==3==4==5

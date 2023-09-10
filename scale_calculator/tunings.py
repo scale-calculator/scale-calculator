@@ -1,7 +1,7 @@
+import tomllib
 from importlib import resources
 
 import typer
-import tomllib
 
 app = typer.Typer()
 

@@ -1,9 +1,10 @@
 import string
-import pytest
-from hypothesis.strategies import text
-from hypothesis import given, assume
-from scale_calculator.tunings import get, get_all, UnknownTuningError
 
+import pytest
+from hypothesis import assume, given
+from hypothesis.strategies import text
+
+from scale_calculator.tunings import UnknownTuningError, get, get_all
 
 all_tunings = [tuning.name for tuning in get_all()]
 
