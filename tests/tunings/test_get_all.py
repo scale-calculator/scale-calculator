@@ -1,5 +1,3 @@
-import pytest
-
 from scale_calculator.tunings import get_all
 
 
