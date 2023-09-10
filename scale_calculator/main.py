@@ -33,8 +33,8 @@ def main(
     #     ..., help="Количество струн на гитаре. Например, 6."),
     tuning: str = typer.Option(
         ..., help="Гитарная настройка. Например, e_standard."),
-    # scale: str = typer.Option(
-    #     ..., help="Музыкальная шкала. Например, minor."),
+    scale: str = typer.Option(
+        ..., help="Музыкальная шкала. Например, minor."),
     root: str = typer.Option(
          ..., help="Корневая нота. Например, E."),
     # fretboard: list = typer.Option(
@@ -42,18 +42,21 @@ def main(
     num_frets: int = typer.Option(
         ..., help="Количество ладов. Например, 4"),
 ):
-    typer.echo(f"Вы выбрали {tuning}, {root} и {num_frets} ладов!")
+    typer.echo(f"Вы выбрали: {tuning}, {scale}, {root} и {num_frets} ладов!")
 
     if tuning == "e_standart":
         string_notes = ["E2", "A2", "D3", "G3", "B3", "E4"]
 
+    if scale == "minor":
+        string_position = "--1-----2--3-----4-----5--6-----7"
+
     print("Нотация:")
-    print(draw_notation(string_notes, num_frets, root))
+    print(draw_notation(string_notes, string_position, num_frets, root))
     print("Табулатура:")
     print(draw_tablature(string_notes, num_frets))
 
 
-def draw_notation(string_notes, num_frets, root):
+def draw_notation(string_notes, string_position, num_frets, root):
 
     num_hyphens = num_frets * 3
 
@@ -69,16 +72,14 @@ def draw_notation(string_notes, num_frets, root):
         lines.append(line)
 
     # определение первой струны
-    index_to_replace = None
     for index, line in enumerate(reversed(lines)):
         if line.startswith(root):
             index_to_replace = len(lines) - 1 - index
             break
 
-    # положения струны
-    if index_to_replace is not None:
-        new_value = f"{note}|" + "--1-----2--3"
-        lines[index_to_replace] = new_value
+    # положения первой струны
+    new_value = f"{note}|" + string_position[:num_hyphens]
+    lines[index_to_replace] = new_value
 
     # гриф гитары
     notation += "\n" + "\n".join(lines)
