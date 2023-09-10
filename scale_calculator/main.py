@@ -25,22 +25,21 @@ C C# D D# E F F# G G# A A# B C
 # A|-0-2-3---
 # E|-0-2-3---
 
+app = typer.Typer()
 
-def main(
+
+@app.command()
+def calc(
     # guitar_type: str = typer.Option(
     #     ..., help="Тип гитары. Например, гитара или бас-гитара"),
     # num_strings: str = typer.Option(
     #     ..., help="Количество струн на гитаре. Например, 6."),
-    tuning: str = typer.Option(
-        ..., help="Гитарная настройка. Например, e_standard."),
-    scale: str = typer.Option(
-        ..., help="Музыкальная шкала. Например, minor."),
-    root: str = typer.Option(
-         ..., help="Корневая нота. Например, E."),
+    tuning: str = typer.Option(..., help="Гитарная настройка. Например, e_standard."),
+    scale: str = typer.Option(..., help="Музыкальная шкала. Например, minor."),
+    root: str = typer.Option(..., help="Корневая нота. Например, E."),
     # fretboard: list = typer.Option(
     #     ..., help="Диапазон грифа. Например, лады 0-5.")
-    num_frets: int = typer.Option(
-        ..., help="Количество ладов. Например, 4"),
+    num_frets: int = typer.Option(..., help="Количество ладов. Например, 4"),
 ):
     typer.echo(f"Вы выбрали: {tuning}, {scale}, {root} и {num_frets} ладов!")
 
@@ -57,7 +56,6 @@ def main(
 
 
 def draw_notation(string_notes, string_position, num_frets, root):
-
     num_hyphens = num_frets * 3
 
     # верхняя горизонтальная линия
@@ -102,4 +100,4 @@ def draw_tablature(string_notes, num_frets):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
