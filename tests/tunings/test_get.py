@@ -6,12 +6,12 @@ from hypothesis.strategies import text
 
 from scale_calculator.tunings import UnknownTuningError, get, get_all
 
-all_tunings = [tuning.name for tuning in get_all()]
+all_tunings = [tuning.short_name for tuning in get_all()]
 
 
 @pytest.mark.parametrize("name", all_tunings)
 def test_returns_tuning_by_name(name):
-    assert get(name).name == name
+    assert get(name).short_name == name
 
 
 @given(text(alphabet=string.ascii_letters + "_"))
