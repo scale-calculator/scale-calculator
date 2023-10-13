@@ -37,7 +37,9 @@ def calc(
     #     ..., help="Тип гитары. Например, гитара или бас-гитара"),
     # num_strings: str = typer.Option(
     #     ..., help="Количество струн на гитаре. Например, 6."),
-    tuning: str = typer.Option(..., help="Гитарная настройка. Например, e_standard."),
+    tuning: str = typer.Option(
+        "e_standard", help="Гитарная настройка. Например, e_standard."
+    ),
     scale: str = typer.Option(..., help="Музыкальная шкала. Например, minor."),
     root: str = typer.Option(..., help="Корневая нота. Например, E."),
     # открытая струна или закрытые струны,
@@ -47,9 +49,16 @@ def calc(
 ):
     typer.echo(f"Вы выбрали: {tuning}, {scale}, {root} и {num_frets} ладов!")
 
+    try:
+        tuning = tunings.get(tuning)
+    except tunings.UnknownTuningError:
+        print(f"Неизвестный строй {tuning}!")
+        raise typer.Exit(code=1)
+
+    string_notes = tuning.notes
+
     # корневая нота на открытой струне
-    if tuning == "e_standart" and scale == "minor":
-        string_notes = ["E2", "A2", "D3", "G3", "B3", "E4"]
+    if scale == "minor":
         string_position = "--1-----2--3-----4-----5--6-----7"
 
     print("Нотация:")
@@ -77,28 +86,32 @@ def draw_notation(string_notes, string_position, num_frets, root):
         if line.startswith(root):
             index_to_replace = len(lines) - 1 - index
             break
-# ---
+    # ---
 
-# 1
+    # 1
     # положения первой струны
     new_value = f"{note}|" + string_position[:num_hyphens]
     lines[index_to_replace] = new_value
 
     # положения второй струны
-    new_value = f"{note}|" + string_position[num_hyphens+3:num_hyphens+3+num_hyphens]
-    lines[index_to_replace-1] = new_value
+    new_value = (
+        f"{note}|" + string_position[num_hyphens + 3 : num_hyphens + 3 + num_hyphens]
+    )
+    lines[index_to_replace - 1] = new_value
 
     # положения третьей струны
-    new_value = f"{note}|" + string_position[num_hyphens+3+num_hyphens+3:] + "-" * 9
-    lines[index_to_replace-2] = new_value
+    new_value = (
+        f"{note}|" + string_position[num_hyphens + 3 + num_hyphens + 3 :] + "-" * 9
+    )
+    lines[index_to_replace - 2] = new_value
 
-# 2
+    # 2
     # for i in range(3):
     #     current_note = string_notes[i]
     #     new_value = f"{current_note}|" + string_position[i * (num_hyphens + 3):(i + 1) * (num_hyphens + 3)]
     #     lines[index_to_replace - i] = new_value
 
-# --
+    # --
     # гриф гитары
     notation += "\n" + "\n".join(lines)
 
